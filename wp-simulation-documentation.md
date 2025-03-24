@@ -1,5 +1,7 @@
 # WordPress Simulation Functions Documentation
 
+- [View on Github](https://github.com/rmilejcz/workspace/blob/main/wp-simulation-documentation.md)
+
 This document provides a reference for all functions available in the `wp-simulation.php` file, which simulates the WordPress environment for testing purposes.
 
 ## Table of Contents
