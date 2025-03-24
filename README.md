@@ -1,8 +1,8 @@
-# WordPress Weather Widget Plugin Challenge
+# WordPress Weather Widget Plugin Challenge (One-Hour Version)
 
 ## Overview
 
-In this challenge, you'll implement core functionality for a WordPress weather widget plugin. The plugin structure and WordPress simulation environment have been set up for you, allowing you to test your plugin without a full WordPress installation.
+In this one-hour challenge, you'll implement **one core component** of a WordPress weather widget plugin. The plugin structure and WordPress simulation environment have been set up for you, allowing you to test your implementation without a full WordPress installation.
 
 ## Available Files
 
@@ -13,76 +13,70 @@ You'll be working with these files:
 - `includes/class-weather-widget.php` - The widget class (needs implementation)
 - `wp-simulation.php` - WordPress core functions simulation (don't modify)
 - `index.php` - Test script that runs automatically (don't modify)
-- `config.php` - Configuration settings (already set up)
-- `utils.php` - Utility functions (already set up)
+- `wp-simulation-documentation.md` - Documentation for available WordPress functions
 
 ## Your Task
 
-Complete the implementation of the following components:
+You have **one hour** to complete this challenge. Rather than trying to implement everything, **choose ONE of the following components** to implement fully:
 
-1. **Weather API Implementation**
+### Option 1: Weather API Implementation
 
-   - Implement the `get_weather()` method in the `Weather_API` class
-   - Implement caching functionality to store weather data
-   - Format temperature based on unit settings
+- Implement the `get_weather()` method in the `Weather_API` class
+- Implement caching functionality to store weather data
+- Format temperature based on unit settings
 
-2. **Weather Widget**
+### Option 2: Weather Widget Implementation
 
-   - Complete the `Weather_Widget` class implementation
-   - Create the front-end display of the widget
-   - Implement widget settings form
+- Complete the `Weather_Widget` class implementation
+- Create the front-end display of the widget
+- Implement widget settings form
 
-3. **Shortcode**
-   - Create the shortcode handler in the main plugin class
-   - Allow configurable location via shortcode attributes
+### Option 3: Shortcode Implementation
+
+- Create the shortcode handler in the main plugin class
+- Allow configurable location via shortcode attributes
+- Generate formatted HTML output for the weather display
 
 ## Testing Your Implementation
 
 - The `index.php` script automatically tests your implementation
 - **To view test results:** Simply refresh the preview pane after making changes
-- The test results will show which components are working and which need further implementation
+- The test results will show progress on whichever component you choose to focus on
 
-## Requirements
+## Component Requirements
 
-### 1. Weather API Implementation
+### Option 1: Weather API Implementation
 
 - Complete the `get_weather()` method to fetch weather data for a location
 - Implement proper caching using the file system
 - Handle errors gracefully and return appropriate `WP_Error` objects
 - Format temperature according to the configured units (metric/imperial)
 
-### 2. Widget Implementation
+### Option 2: Widget Implementation
 
 - Complete the `widget()` method to display weather data on the front-end
 - Create a configurable widget with settings for location and display options
 - Implement the widget admin form
 - Sanitize and validate all user inputs
 
-### 3. Shortcode Implementation
+### Option 3: Shortcode Implementation
 
 - Create a `[weather]` shortcode that accepts location attributes
 - Handle default locations when none is specified
 - Return formatted HTML displaying the weather information
-
-### 4. Additional Features (optional)
-
-- Implement refresh functionality using AJAX
-- Add weather icons based on conditions
-- Add forecast data (if available from the API)
-- Implement responsive design for the widget
+- Allow customization through shortcode attributes
 
 ## Evaluation Criteria
 
-- Correctness of implementation
+- **Focus on quality over quantity** - A well-implemented single feature is better than partial implementation of multiple features
 - Code organization and structure
 - WordPress best practices
 - Error handling and edge cases
-- Performance considerations (especially caching)
 - Security (proper data validation and sanitization)
 
 ## Notes
 
 - The API uses mock data for simplicity (you don't need a real API key)
-- Focus on completing the core functionality before attempting bonus features
+- The `wp-simulation-documentation.md` file contains documentation for all available WordPress functions
 - Add comments to explain your implementation decisions
-- Follow WordPress coding standards
+- Remember, you only have one hour - scope your work accordingly!
