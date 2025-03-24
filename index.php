@@ -328,10 +328,26 @@ $output_buffer = ob_get_clean();
             </div>
 
             <?php if (!empty($output_buffer)): ?>
-            <div class="section">
-                <h2>Debug Output</h2>
-                <pre style="overflow: auto; background: #f0f0f1; padding: 10px; border: 1px solid #ddd;"><?php echo htmlspecialchars($output_buffer); ?></pre>
-            </div>
+                <div class="section">
+                    <h2>Debug Information</h2>
+                    <div class="debug-container">
+                        <h3>Function Calls</h3>
+                        <pre><?php echo $debug_output['function_calls']; ?></pre>
+                        
+                        <h3>API Test Results</h3>
+                        <pre><?php 
+                            foreach($debug_output['api_tests'] as $test => $result) {
+                                echo "$test: " . ($result ? 'PASS' : 'FAIL') . "\n";
+                                if (isset($debug_output['api_errors'][$test])) {
+                                    echo "  Error: " . $debug_output['api_errors'][$test] . "\n";
+                                }
+                            }
+                        ?></pre>
+                        
+                        <h3>Cache Operations</h3>
+                        <pre><?php echo $debug_output['cache_ops']; ?></pre>
+                    </div>
+                </div>
             <?php endif; ?>
         </div>
     </div>
