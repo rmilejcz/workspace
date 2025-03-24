@@ -11,6 +11,71 @@ ob_start();
 // Load WordPress simulation
 require_once 'wp-simulation.php';
 
+// Initialize debug output array
+$debug_output = array(
+    'function_calls' => '',
+    'api_tests' => array(),
+    'api_errors' => array(),
+    'cache_ops' => ''
+);
+
+// Debug function to log function calls
+function debug_log($message) {
+    global $debug_output;
+    $debug_output['function_calls'] .= $message . "\n";
+}
+
+// Debug function to log cache operations
+function debug_cache_log($message) {
+    global $debug_output;
+    $debug_output['cache_ops'] .= $message . "\n";
+}
+
+// Monkey patch Weather_API to track method calls
+class_exists('Weather_API') && add_action('after_setup_theme', function() {
+    $weather_api_methods = array('get_weather', 'format_temperature', 'get_cache_key', 'get_cached_data', 'save_to_cache');
+    
+    foreach ($weather_api_methods as $method) {
+        if (method_exists('Weather_API', $method)) {
+            $original_method = array('Weather_API', $method);
+            $patched_method = function() use ($original_method, $method) {
+                $args = func_get_args();
+                $args_print = implode(', ', array_map(function($arg) {
+                    return is_string($arg) ? "'$arg'" : (is_array($arg) ? 'array' : $arg);
+                }, $args));
+                
+                debug_log("→ Weather_API::$method($args_print) called");
+                
+                if ($method === 'get_cached_data') {
+                    debug_cache_log("Checking cache for key: " . $args[0]);
+                } elseif ($method === 'save_to_cache') {
+                    debug_cache_log("Saving to cache with key: " . $args[0]);
+                }
+                
+                $result = call_user_func_array($original_method, $args);
+                
+                if ($method === 'get_weather') {
+                    global $debug_output;
+                    $city = $args[0];
+                    if (is_wp_error($result)) {
+                        $debug_output['api_tests'][$city] = false;
+                        $debug_output['api_errors'][$city] = $result->get_error_message();
+                    } else {
+                        $debug_output['api_tests'][$city] = true;
+                    }
+                }
+                
+                return $result;
+            };
+            
+            // Replace the method
+            if (function_exists('runkit_method_redefine')) {
+                runkit_method_redefine('Weather_API', $method, $patched_method);
+            }
+        }
+    }
+});
+
 // Load plugin files
 require_once 'weather-widget.php';
 
@@ -37,6 +102,7 @@ if (class_exists('Weather_API')) {
     $cities = array('London', 'New York', 'Tokyo', 'InvalidCity');
     
     foreach ($cities as $city) {
+        debug_log("Testing API for city: $city");
         $result = $api->get_weather($city);
         
         if (is_wp_error($result)) {
@@ -65,6 +131,7 @@ $shortcode_implemented = false;
 // Only try to do shortcode if we have registered shortcodes
 global $wp_shortcodes;
 if (!empty($wp_shortcodes) && isset($wp_shortcodes['weather'])) {
+    debug_log("Testing shortcode with location: Sydney");
     $shortcode_result = do_shortcode('[weather location="Sydney"]');
     $shortcode_implemented = ($shortcode_result !== '[weather location="Sydney"]');
 }
@@ -327,28 +394,30 @@ $output_buffer = ob_get_clean();
                 <?php endif; ?>
             </div>
 
-            <?php if (!empty($output_buffer)): ?>
-                <div class="section">
-                    <h2>Debug Information</h2>
-                    <div class="debug-container">
-                        <h3>Function Calls</h3>
-                        <pre><?php echo $debug_output['function_calls']; ?></pre>
-                        
-                        <h3>API Test Results</h3>
-                        <pre><?php 
+            <div class="section">
+                <h2>Debug Information</h2>
+                <div class="debug-container">
+                    <h3>Function Calls</h3>
+                    <pre><?php echo $debug_output['function_calls']; ?></pre>
+                    
+                    <h3>API Test Results</h3>
+                    <pre><?php 
+                        if (!empty($debug_output['api_tests'])) {
                             foreach($debug_output['api_tests'] as $test => $result) {
                                 echo "$test: " . ($result ? 'PASS' : 'FAIL') . "\n";
                                 if (isset($debug_output['api_errors'][$test])) {
                                     echo "  Error: " . $debug_output['api_errors'][$test] . "\n";
                                 }
                             }
-                        ?></pre>
-                        
-                        <h3>Cache Operations</h3>
-                        <pre><?php echo $debug_output['cache_ops']; ?></pre>
-                    </div>
+                        } else {
+                            echo "No API tests run yet.\n";
+                        }
+                    ?></pre>
+                    
+                    <h3>Cache Operations</h3>
+                    <pre><?php echo $debug_output['cache_ops'] ?: "No cache operations recorded yet."; ?></pre>
                 </div>
-            <?php endif; ?>
+            </div>
         </div>
     </div>
 </body>
