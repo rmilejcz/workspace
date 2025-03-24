@@ -2,27 +2,45 @@
 
 ## Overview
 
-In this challenge, you'll implement core functionality for a WordPress weather widget plugin. The plugin structure has been set up for you, but several key components need to be implemented.
+In this challenge, you'll implement core functionality for a WordPress weather widget plugin. The plugin structure and WordPress simulation environment have been set up for you, allowing you to test your plugin without a full WordPress installation.
+
+## Available Files
+
+You'll be working with these files:
+
+- `weather-widget.php` - The main plugin file (needs your implementation)
+- `includes/class-weather-api.php` - The API handler class (needs implementation)
+- `includes/class-weather-widget.php` - The widget class (needs implementation)
+- `wp-simulation.php` - WordPress core functions simulation (don't modify)
+- `index.php` - Test script that runs automatically (don't modify)
+- `config.php` - Configuration settings (already set up)
+- `utils.php` - Utility functions (already set up)
 
 ## Your Task
 
-Complete the implementation of the Weather API class and related plugin functionality:
+Complete the implementation of the following components:
 
-1. **Complete the Weather API Implementation**
+1. **Weather API Implementation**
 
    - Implement the `get_weather()` method in the `Weather_API` class
    - Implement caching functionality to store weather data
    - Format temperature based on unit settings
 
-2. **Implement the Weather Widget**
+2. **Weather Widget**
 
    - Complete the `Weather_Widget` class implementation
    - Create the front-end display of the widget
    - Implement widget settings form
 
-3. **Implement the Shortcode**
+3. **Shortcode**
    - Create the shortcode handler in the main plugin class
    - Allow configurable location via shortcode attributes
+
+## Testing Your Implementation
+
+- The `index.php` script automatically tests your implementation
+- **To view test results:** Simply refresh the preview pane after making changes
+- The test results will show which components are working and which need further implementation
 
 ## Requirements
 
@@ -46,29 +64,14 @@ Complete the implementation of the Weather API class and related plugin function
 - Handle default locations when none is specified
 - Return formatted HTML displaying the weather information
 
-### 4. Additional Features (optional, for bonus points)
+### 4. Additional Features (optional)
 
 - Implement refresh functionality using AJAX
 - Add weather icons based on conditions
 - Add forecast data (if available from the API)
 - Implement responsive design for the widget
 
-## Testing Your Code
-
-The testing environment includes a WordPress simulation that allows you to test your plugin without a full WordPress installation. You can use the following:
-
-1. `test.php` - A script that tests your plugin functionality
-2. `wp-simulation.php` - Simulates WordPress core functions
-
-To run your test:
-
-```
-php test.php
-```
-
 ## Evaluation Criteria
-
-Your submission will be evaluated on:
 
 - Correctness of implementation
 - Code organization and structure
@@ -83,5 +86,3 @@ Your submission will be evaluated on:
 - Focus on completing the core functionality before attempting bonus features
 - Add comments to explain your implementation decisions
 - Follow WordPress coding standards
-
-Good luck!
