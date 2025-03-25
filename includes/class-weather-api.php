@@ -2,7 +2,8 @@
 /**
  * Weather API Handler Class
  * 
- * Handles communication with the weather API service
+ * Handles retrieving weather data using mock data
+ * NOTE: This challenge uses mock data - no real API connection is required
  */
 
 // Exit if accessed directly
@@ -11,16 +12,6 @@ if (!defined('ABSPATH')) {
 }
 
 class Weather_API {
-    /**
-     * API key
-     */
-    private $api_key;
-    
-    /**
-     * API base URL
-     */
-    private $api_url = 'https://api.openweathermap.org/data/2.5/weather';
-    
     /**
      * Units (metric or imperial)
      */
@@ -44,7 +35,6 @@ class Weather_API {
         $settings = get_option('weather_widget_settings', array());
         
         // Set properties from settings
-        $this->api_key = isset($settings['api_key']) ? $settings['api_key'] : '';
         $this->units = isset($settings['units']) ? $settings['units'] : 'metric';
         $this->cache_time = isset($settings['cache_time']) ? $settings['cache_time'] : 1800;
         
@@ -69,7 +59,7 @@ class Weather_API {
         // TODO: Implement this method
         // 1. Check if we have cached data for this location
         // 2. If cache is valid and we're not forcing refresh, return cached data
-        // 3. Otherwise, fetch fresh data from API
+        // 3. Otherwise, fetch mock data for this location
         // 4. Cache the data for future use
         // 5. Return the data
         
@@ -132,27 +122,13 @@ class Weather_API {
     }
     
     /**
-     * Make API request
+     * Get mock weather data for a location
+     * This method provides mock data for the challenge - no real API call is made
      * 
-     * @param array $params Request parameters
-     * @return array|WP_Error Response data or error
-     */
-    private function make_api_request($params) {
-        // TODO: Implement this method
-        // For the challenge, we'll return mock data instead of making a real API call
-        // In a real plugin, we would use wp_remote_get() here
-        
-        return $this->get_mock_weather_data($params['q']);
-    }
-    
-    /**
-     * Get mock weather data for a city
-     * This is just for the challenge
-     * 
-     * @param string $city City name
+     * @param string $location The location to get weather for
      * @return array Mock weather data
      */
-    private function get_mock_weather_data($city) {
+    private function get_mock_weather_data($location) {
         $cities = array(
             'London' => array(
                 'temp' => 15.2,
@@ -184,9 +160,9 @@ class Weather_API {
             )
         );
         
-        // Get data for the requested city, or generate random data if city not found
-        if (isset($cities[$city])) {
-            $weather_data = $cities[$city];
+        // Get data for the requested location, or generate random data if location not found
+        if (isset($cities[$location])) {
+            $weather_data = $cities[$location];
         } else {
             $weather_data = array(
                 'temp' => rand(5, 35) + (rand(0, 10) / 10),
@@ -198,7 +174,7 @@ class Weather_API {
         }
         
         // Add extra data to make it more realistic
-        $weather_data['city'] = $city;
+        $weather_data['city'] = $location;
         $weather_data['country'] = 'Unknown';
         $weather_data['timestamp'] = time();
         

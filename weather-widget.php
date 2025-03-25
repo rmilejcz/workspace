@@ -89,7 +89,6 @@ class Weather_Widget_Plugin {
     public function activate() {
         // TODO: Set up default options
         add_option('weather_widget_settings', array(
-            'api_key' => '',
             'default_location' => 'New York',
             'units' => 'metric',
             'cache_time' => 1800 // 30 minutes

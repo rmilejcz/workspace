@@ -4,6 +4,10 @@
 
 In this one-hour challenge, you'll implement **one core component** of a WordPress weather widget plugin. The plugin structure and WordPress simulation environment have been set up for you, allowing you to test your implementation without a full WordPress installation.
 
+## Important Note About Weather Data
+
+**This challenge uses mock weather data** - there is no actual API connection required. The mock data is provided in the `get_mock_weather_data()` method in the Weather_API class. Your implementation should work with this mock data as if it were coming from a real API.
+
 ## Available Files
 
 You'll be working with these files:
