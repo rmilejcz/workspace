@@ -66,14 +66,40 @@ class Weather_API {
      * @return array|WP_Error Weather data or error
      */
     public function get_weather($location, $force_refresh = false) {
+        $mocks_array = []; 
         // TODO: Implement this method
+        $filename = 'cach_location' . '.json';
+        $filepath = $this->cache_dir . $filename;
         // 1. Check if we have cached data for this location
+        if (file_exists($filepath)) {
+            $cached = json_decode(file_get_contents($filepath), true);
+        
+            // Optional: check if it's still valid (e.g., not older than 1 hour)
+            if (time() - $cached['timestamp'] < $this->cache_time && !$force_refresh) {
+                return $cached;
+            }
+        } else {
+            $mocks = $this->get_mock_weather_data($location);
+
+            if (isset($mocks)) {
+            // Make a json file 
+            array_push($mocks_array, $mocks);    
+            file_put_contents($filepath, json_encode($mocks_array));
+            // create an object to store the data $mocks 
+            
+            return $mocks;
+            } else {
+                return new WP_Error('not_implemented', __('Weather API not implemented', 'weather-widget'));
+            }
+        }
         // 2. If cache is valid and we're not forcing refresh, return cached data
         // 3. Otherwise, fetch fresh data from API
+        
+
         // 4. Cache the data for future use
         // 5. Return the data
         
-        return new WP_Error('not_implemented', __('Weather API not implemented', 'weather-widget'));
+        // ....
     }
     
     /**
@@ -155,7 +181,7 @@ class Weather_API {
     private function get_mock_weather_data($city) {
         $cities = array(
             'London' => array(
-                'temp' => 15.2,
+                'temp' => 10,
                 'humidity' => 76,
                 'conditions' => 'Cloudy',
                 'wind_speed' => 12.5,
